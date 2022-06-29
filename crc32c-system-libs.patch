@@ -1,0 +1,57 @@
+--- crc32c-1.1.2/CMakeLists.txt.orig	2021-10-05 21:47:30.000000000 +0200
++++ crc32c-1.1.2/CMakeLists.txt	2022-06-29 16:46:21.011209574 +0200
+@@ -187,26 +187,9 @@ if(CRC32C_USE_GLOG)
+   # CPU cycles on the CI.
+   set(BUILD_TESTING_SAVED "${BUILD_TESTING}")
+   set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+-  add_subdirectory("third_party/glog" EXCLUDE_FROM_ALL)
++  find_package(glog REQUIRED)
+   set(BUILD_TESTING "${BUILD_TESTING_SAVED}" CACHE BOOL "" FORCE)
+ 
+-  # glog triggers deprecation warnings on OSX.
+-  # https://github.com/google/glog/issues/185
+-  if(CRC32C_HAVE_NO_DEPRECATED)
+-    set_property(TARGET glog APPEND PROPERTY COMPILE_OPTIONS -Wno-deprecated)
+-  endif(CRC32C_HAVE_NO_DEPRECATED)
+-
+-  # glog triggers sign comparison warnings on gcc.
+-  if(CRC32C_HAVE_NO_SIGN_COMPARE)
+-    set_property(TARGET glog APPEND PROPERTY COMPILE_OPTIONS -Wno-sign-compare)
+-  endif(CRC32C_HAVE_NO_SIGN_COMPARE)
+-
+-  # glog triggers unused parameter warnings on clang.
+-  if(CRC32C_HAVE_NO_UNUSED_PARAMETER)
+-    set_property(TARGET glog
+-                 APPEND PROPERTY COMPILE_OPTIONS -Wno-unused-parameter)
+-  endif(CRC32C_HAVE_NO_UNUSED_PARAMETER)
+-
+   set(CRC32C_TESTS_BUILT_WITH_GLOG 1)
+ endif(CRC32C_USE_GLOG)
+ 
+@@ -315,16 +298,8 @@ if(CRC32C_BUILD_TESTS)
+   set(install_gmock OFF)
+ 
+   # This project is tested using GoogleTest.
+-  add_subdirectory("third_party/googletest")
++  find_package(GTest REQUIRED)
+ 
+-  # GoogleTest triggers a missing field initializers warning.
+-  if(CRC32C_HAVE_NO_MISSING_FIELD_INITIALIZERS)
+-    set_property(TARGET gtest
+-        APPEND PROPERTY COMPILE_OPTIONS -Wno-missing-field-initializers)
+-    set_property(TARGET gmock
+-        APPEND PROPERTY COMPILE_OPTIONS -Wno-missing-field-initializers)
+-  endif(CRC32C_HAVE_NO_MISSING_FIELD_INITIALIZERS)
+-
+   add_executable(crc32c_tests "")
+   target_sources(crc32c_tests
+     PRIVATE
+@@ -385,7 +368,7 @@ if(CRC32C_BUILD_BENCHMARKS)
+   # This project uses Google benchmark for benchmarking.
+   set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+   set(BENCHMARK_ENABLE_EXCEPTIONS OFF CACHE BOOL "" FORCE)
+-  add_subdirectory("third_party/benchmark")
++  find_package(benchmark REQUIRED)
+   target_link_libraries(crc32c_bench benchmark)
+ 
+   if(CRC32C_USE_GLOG)
