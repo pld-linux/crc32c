@@ -6,7 +6,7 @@ Summary:	CRC32C library
 Summary(pl.UTF-8):	Biblioteka cyklicznego kodu nadmiarowego CRC32C
 Name:		crc32c
 Version:	1.1.2
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/google/crc32c/tags
@@ -16,6 +16,7 @@ Patch0:		%{name}-system-libs.patch
 URL:		https://github.com/google/crc32c
 BuildRequires:	cmake >= 3.1
 BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	sed >= 4.0
 %if %{with tests}
 # with cmake support
 BuildRequires:	glog-devel >= 0.6
@@ -61,6 +62,11 @@ Pliki nagłówkowe biblioteki crc32c.
 %prep
 %setup -q
 %patch0 -p1
+
+# crc32c_sse42_unittest is missing runtime detection of CPU capabilities
+if ! grep -q '^flags .* sse4_2' /proc/cpuinfo ; then
+	%{__sed} -i -e 's/if HAVE_SSE42 /if 0 /' src/crc32c_sse42_unittest.cc
+fi
 
 %build
 install -d build
