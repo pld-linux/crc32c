@@ -61,7 +61,7 @@ Pliki nagłówkowe biblioteki crc32c.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P0 -p1
 
 # crc32c_sse42_unittest is missing runtime detection of CPU capabilities
 if ! grep -q '^flags .* sse4_2' /proc/cpuinfo ; then
