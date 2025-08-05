@@ -16,6 +16,7 @@ Patch0:		%{name}-system-libs.patch
 URL:		https://github.com/google/crc32c
 BuildRequires:	cmake >= 3.1
 BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	sed >= 4.0
 %if %{with tests}
 # with cmake support
