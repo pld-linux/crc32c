@@ -72,7 +72,7 @@ fi
 install -d build
 cd build
 %cmake .. \
-	%{!?with_tests:-DCRC32C_BUILD_BENCHMARKS=OFF -DCRC32C_BUILD_TESTS=OFF}
+	%{!?with_tests:-DCRC32C_BUILD_BENCHMARKS=OFF -DCRC32C_BUILD_TESTS=OFF -DCRC32C_USE_GLOG=OFF}
 
 %{__make}
 
